@@ -12,11 +12,14 @@ def create_path(year, month, day, hour, prediction_hour, ending):
     return path
 
 
+
 def get_weather_on_day(year, month, day, hour, prediction_hour):
     path = create_path(year, month, day, hour, prediction_hour, '%3a00%3a00')
     loaded = np.load(path)
     features = loaded.files
     return loaded
+
+
 
 from scipy import spatial
 
@@ -32,10 +35,16 @@ def convert_to_indices(index, width):
     iw = int(index / width)
     return iw, ih
 
-def get_weather_pandas(loaded, row, column):
+def get_weather_pandas(loaded, row, column, hour, point_number):
     data = {}
     for name in loaded.files:
-        data[name] = [ loaded[name][row,column]]
-    return pd.DataFrame(data)
+        data[name + '_' + str(hour) + '_' + str(point_number)] = [ loaded[name][row,column]]
+    return data
 
-
+def get_weather_pandas1(loaded, row, column, hour, point_number, feats):
+    #data = {}
+    for name in loaded.files:
+        if name + '_' + str(hour) + '_' + str(point_number) in feats:
+            feats[name + '_' + str(hour) + '_' + str(point_number)].append(loaded[name][row,column])
+        else:
+            feats[name + '_' + str(hour) + '_' + str(point_number)]=[loaded[name][row,column]]

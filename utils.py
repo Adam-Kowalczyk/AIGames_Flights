@@ -31,7 +31,7 @@ def generate_slerp_path(path, points_num):
     for idx, p2 in enumerate(path[1:]):
         dist += distance.distance(path[idx], p2).miles
         dist_cum.append(dist)
-    
+
     coords = [path[0]]
     to_id = 0
     for i in range(1, points_num):
@@ -40,7 +40,7 @@ def generate_slerp_path(path, points_num):
             to_id += 1
         t = (target - dist_cum[to_id - 1]) / (dist_cum[to_id] - dist_cum[to_id - 1])
         coords.append(slerp_pos(path[to_id - 1], path[to_id], t))
-    
+        
     coords.append(path[-1])
 
     return coords
